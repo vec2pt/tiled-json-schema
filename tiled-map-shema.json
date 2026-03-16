@@ -105,7 +105,72 @@
         },
         "def_text": {
             "type": "object",
-            "additionalProperties": false
+            "additionalProperties": false,
+            "required": ["text"],
+            "properties": {
+                "bold": {
+                    "type": "boolean",
+                    "description": "Whether to use a bold font (default: `false`)",
+                    "default": false
+                },
+                "color": {
+                    "type": "string",
+                    "description": "Hex-formatted color (#RRGGBB or #AARRGGBB) (default: `#000000`)",
+                    "pattern": "^#([A-F0-9]{6}|[A-F0-9]{8})$",
+                    "default": "#000000"
+                },
+                "fontfamily": {
+                    "type": "string",
+                    "description": "Font family (default: `sans-serif`)",
+                    "default": "sans-serif"
+                },
+                "halign" : {
+                    "type": "string",
+                    "description": "Horizontal alignment (`center`, `right`, `justify` or `left` (default))",
+                    "enum": ["center", "right", "justify", "left"],
+                    "default": "left"
+                },
+                "italic": {
+                    "type": "boolean",
+                    "description": "Whether to use an italic font (default: `false`)",
+                    "default": false
+                },
+                "kerning": {
+                    "type": "boolean",
+                    "description": "Whether to use kerning when placing characters (default: `true`)",
+                    "default": true
+                },
+                "pixelsize": {
+                    "type": "integer",
+                    "description": "Pixel size of font (default: 16)",
+                    "default": 16
+                },
+                "strikeout": {
+                    "type": "boolean",
+                    "description": "Whether to strike out the text (default: `false`)",
+                    "default": false
+                },
+                "text" : {
+                    "type": "string",
+                    "description": "Text"
+                },
+                "underline" : {
+                    "type": "boolean",
+                    "description": "Whether to underline the text (default: `false`)",
+                    "default": false
+                },
+                "valign" : {
+                    "type": "string",
+                    "description": "Vertical alignment (`center`, `bottom` or `top` (default))",
+                    "enum": ["center", "bottom", "top"],
+                    "default": "top"
+                },
+                "wrap" : {
+                    "type": "boolean",
+                    "description": "Whether the text is wrapped within the object bounds (default: `false`)",
+                    "default": false
+                }
+            }
         },
         "def_object": {
             "type": "object",
@@ -175,7 +240,7 @@
                     "description": "Reference to a template file, in case object is a template instance"
                 },
                 "text": {
-                    "description": "Only used for text objects (TODO)",
+                    "description": "Only used for text objects",
                     "$ref": "#/$defs/def_text"
                 },
                 "type": {
