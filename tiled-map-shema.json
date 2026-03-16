@@ -86,9 +86,120 @@
                     "description": "Y coordinate in tiles"
                 }
             }
-
-
-
+        },
+        "def_point": {
+            "type": "object",
+            "description": "A point on a polygon or a polyline, relative to the position of the object.",
+            "additionalProperties": false,
+            "required": ["x", "y"],
+            "properties": {
+                "x": {
+                    "type": "number",
+                    "description": "X coordinate in pixels"
+                },
+                "y": {
+                    "type": "number",
+                    "description": "Y coordinate in pixels"
+                }
+            }
+        },
+        "def_text": {
+            "type": "object",
+            "additionalProperties": false
+        },
+        "def_object": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["capsule", "ellipse", "height", "id", "name", "opacity", "point", "rotation", "type", "visible", "width", "x", "y"],
+            "properties": {
+                "capsule": {
+                    "type": "boolean",
+                    "description": "Used to mark an object as a capsule"
+                },
+                "ellipse": {
+                    "type": "boolean",
+                    "description": "Used to mark an object as an ellipse"
+                },
+                "gid": {
+                    "type": "integer",
+                    "description": "Global tile ID, only if object represents a tile"
+                },
+                "height": {
+                    "type": "number",
+                    "description": "Width in pixels",
+                    "minimum": 0
+                },
+                "id": {
+                    "type": "integer",
+                    "description": "Incremental ID, unique across all objects"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "String assigned to name field in editor"
+                },
+                "opacity": {
+                    "type": "number",
+                    "description": "The opacity of the object as a value from 0 to 1 (default: 1)",
+                    "default": 1,
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "point": {
+                    "type": "boolean",
+                    "description": "Used to mark an object as a point"
+                },
+                "polygon": {
+                    "type": "array",
+                    "description": "Array of Points, in case the object is a polygon",
+                    "minItems": 3,
+                    "items": { "$ref": "#/$defs/def_point" }
+                },
+                "polyline": {
+                    "type": "array",
+                    "description": "Array of Points, in case the object is a polyline",
+                    "minItems": 2,
+                    "items": { "$ref": "#/$defs/def_point" }
+                },
+                "properties": {
+                    "type": "array",
+                    "description": "Array of Properties",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_property" }
+                },
+                "rotation": {
+                    "type": "number",
+                    "description": "Angle in degrees clockwise"
+                },
+                "template": {
+                    "type": "string",
+                    "description": "Reference to a template file, in case object is a template instance"
+                },
+                "text": {
+                    "description": "Only used for text objects (TODO)",
+                    "$ref": "#/$defs/def_text"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The class of the object (was saved as `class` in 1.9, optional)"
+                },
+                "visible": {
+                    "type": "boolean",
+                    "description": "Whether object is shown in editor."
+                },
+                "width": {
+                    "type": "number",
+                    "description": "Width in pixels",
+                    "minimum": 0
+                },
+                "x": {
+                    "type": "number",
+                    "description": "X coordinate in pixels"
+                },
+                "y": {
+                    "type": "number",
+                    "description": "Y coordinate in pixels"
+                }
+            }
         },
         "def_layer": {
             "type": "object",
@@ -182,7 +293,8 @@
                 },
                 "objects": {
                     "type": "array",
-                    "description": "Array of objects. `objectgroup` only. (TODO)"
+                    "description": "Array of objects. `objectgroup` only.",
+                    "items": { "$ref": "#/$defs/def_object" }
                 },
                 "offsetx": {
                     "type": "number",
@@ -211,7 +323,6 @@
                     "description": "Vertical parallax factor for this layer (default: 1). (since 1.5)",
                     "default": 1
                 },
-
                 "properties": {
                     "type": "array",
                     "description": "Array of Properties",

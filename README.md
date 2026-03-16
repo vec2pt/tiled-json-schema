@@ -10,3 +10,4 @@ Unofficial repository with a JSON schema for the [Tiled](https://www.mapeditor.o
 - Map: Make the required `hexsidelength` based on the value of parameter `orientation`.
 - Layer: Check if the `offsetx` / `offsety` parameter is indeed a double and not an int.
 - Layer: Make the required `chunks` / `compression` / `data` / `encoding` / `height` / `image` / `imageheight` / `imagewidth` / `layers` / `objects` / `repeatx` / `repeaty` / `transparentcolor` / `width` based on the value of parameter `type`.
+- Object: Check if the `height` / `width` / `x` / `y` parameter is indeed a double and not an int.
