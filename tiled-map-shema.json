@@ -1,0 +1,390 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Map",
+    "description": "Tiled can export maps as JSON files. To do so, simply select 'File > Export As' and select the JSON file type. You can export json from the command line with the `--export-map` option. The fields found in the JSON format differ slightly from those in the TMX Map Format, but the meanings should remain the same.",
+    "type": "object",
+
+    "$defs": {
+        "def_property": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [ "type", "propertytype", "value"],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Type of the property (`string` (default), `int`, float, bool, `color`, `file`, `object` or `class` (since 0.16, with `color` and `file` added in 0.17, `object` added in 1.4 and `class` added in 1.8))",
+                    "enum": ["string", "int", "float", "bool", "color", "file", "object", "class" ],
+                    "default": "string"
+                },
+                "propertytype": {
+                    "type": "string",
+                    "description": "Name of the custom property type, when applicable (since 1.8)"
+                },
+                "value": {
+                    "description": "Value of the property"
+                }
+            }
+        },
+
+        "def_blend_mode": {
+            "type": "string",
+            "enum": [
+                "normal",
+                "add",
+                "multiply",
+                "screen",
+                "overlay",
+                "darken",
+                "lighten",
+                "color-dodge",
+                "color-burn",
+                "hard-light",
+                "soft-light",
+                "difference",
+                "exclusion"
+            ],
+            "default": "normal"
+        },
+        "def_chunk": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [ "data", "height", "width", "x", "y"],
+            "properties": {
+                "data": {
+                    "description": "Array of unsigned int (GIDs) or base64-encoded data.",
+                    "oneOf": [
+                        {
+                            "type": "string",
+                            "contentMediaType": "image/png",
+                            "contentEncoding": "base64"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "minimum": 0
+                            }
+                        }
+                    ]
+                },
+                "height": {
+                    "type": "integer",
+                    "description": "Row count",
+                    "minimum": 1
+                },
+                "width": {
+                    "type": "integer",
+                    "description": "Row count",
+                    "minimum": 1
+                },
+                "x": {
+                    "type": "integer",
+                    "description": "X coordinate in tiles"
+                },
+                "y": {
+                    "type": "integer",
+                    "description": "Y coordinate in tiles"
+                }
+            }
+
+
+
+        },
+        "def_layer": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [ "compression", "encoding", "id", "name", "opacity", "type", "visible", "x", "y"],
+            "properties": {
+                "chunks": {
+                    "type": "array",
+                    "description": "Array of chunks (optional). `tilelayer` only.",
+                    "items": { "$ref": "#/$defs/def_chunk" }
+                },
+                "class": {
+                    "type": "string",
+                    "description": "The class of the layer (since 1.9, optional)"
+                },
+                "compression": {
+                    "type": "string",
+                    "description": "`zlib`, `gzip`, `zstd` (since 1.3) or empty (default). `tilelayer` only.",
+                    "enum": [ "zlib", "gzip", "zstd", ""],
+                    "default": ""
+                },
+                "data": {
+                    "description": "Array of `unsigned int` (GIDs) or base64-encoded data. `tilelayer` only.",
+                    "oneOf": [
+                        {
+                            "type": "string",
+                            "contentMediaType": "image/png",
+                            "contentEncoding": "base64"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "minimum": 0
+                            }
+                        }
+                    ]
+                },
+                "draworder": {
+                    "type": "string",
+                    "description": "`topdown` (default) or `index`. `objectgroup` only.",
+                    "enum": [ "topdown", "index"],
+                    "default": "topdown"
+                },
+                "encoding": {
+                    "type": "string",
+                    "description": "`csv` (default) or `base64`. `tilelayer` only.",
+                    "enum": [ "csv", "base64"],
+                    "default": "csv"
+                },
+                "height": {
+                    "type": "integer",
+                    "description": "Row count. Same as map height for fixed-size maps. `tilelayer` only.",
+                    "minimum": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "description": "Incremental ID - unique across all layers"
+                },
+                "image" : {
+                    "type": "string",
+                    "description": "Image used by this layer. `imagelayer` only."
+                },
+                "imageheight": {
+                    "type": "integer",
+                    "description": "Height of the image used by this layer. `imagelayer` only. (since 1.11.1)"
+                },
+                "imagewidth": {
+                    "type": "integer",
+                    "description": "Width of the image used by this layer. `imagelayer` only. (since 1.11.1)"
+                },
+                "layers" : {
+                    "type": "array",
+                    "description": "Array of layers. `group` only.",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_layer" }
+                },
+                "locked": {
+                    "type": "boolean",
+                    "description": "Whether layer is locked in the editor (default: false). (since 1.8.2)",
+                    "default": false
+
+                },
+                "mode": {
+                    "description": "The blend mode to use when rendering the layer. (since 1.12)",
+                    "$ref": "#/$defs/def_blend_mode"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name assigned to this layer"
+                },
+                "objects": {
+                    "type": "array",
+                    "description": "Array of objects. `objectgroup` only. (TODO)"
+                },
+                "offsetx": {
+                    "type": "number",
+                    "description": "Horizontal layer offset in pixels (default: 0)",
+                    "default": 0
+                },
+                "offsety": {
+                    "type": "number",
+                    "description": "Vertical layer offset in pixels (default: 0)",
+                    "default": 0
+                },
+                "opacity": {
+                    "type": "number",
+                    "description": "Value between 0 and 1 (default: 1)",
+                    "default": 1,
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                "parallaxx": {
+                    "type": "number",
+                    "description": "Horizontal parallax factor for this layer (default: 1). (since 1.5)",
+                    "default": 1
+                },
+                "parallaxy": {
+                    "type": "number",
+                    "description": "Vertical parallax factor for this layer (default: 1). (since 1.5)",
+                    "default": 1
+                },
+
+                "properties": {
+                    "type": "array",
+                    "description": "Array of Properties",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_property" }
+                },
+                "repeatx": {
+                    "type": "boolean",
+                    "description": "Whether the image drawn by this layer is repeated along the X axis. `imagelayer` only. (since 1.8)"
+                },
+                "repeaty": {
+                    "type": "boolean",
+                    "description": "Whether the image drawn by this layer is repeated along the Y axis. `imagelayer` only. (since 1.8)"
+                },
+                "startx": {
+                    "type": "integer",
+                    "description": "X coordinate where layer content starts (for infinite maps)"
+                },
+                "starty": {
+                    "type": "integer",
+                    "description": "Y coordinate where layer content starts (for infinite maps)"
+                },
+                "tintcolor": {
+                    "type": "string",
+                    "description": "Hex-formatted tint color (#RRGGBB or #AARRGGBB) that is multiplied with any graphics drawn by this layer or any child layers (optional).",
+                    "pattern": "^#([A-F0-9]{6}|[A-F0-9]{8})$"
+                },
+                "transparentcolor": {
+                    "type": "string",
+                    "description": "Hex-formatted color (#RRGGBB) (optional). imagelayer only.",
+                    "pattern": "^#([A-F0-9]{6})$"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "`tilelayer`, `objectgroup`, `imagelayer` or `group`",
+                    "enum": ["tilelayer", "objectgroup", "imagelayer", "group"]
+                },
+                "visible": {
+                    "type": "boolean",
+                    "description": "Whether layer is shown or hidden in editor"
+                },
+                "width": {
+                    "type": "integer",
+                    "description": "Column count. Same as map width for fixed-size maps. `tielayer` only.",
+                    "minimum": 1
+                },
+                "x": {
+                    "type": "integer",
+                    "description": "Horizontal layer offset in tiles. Always 0.",
+                    "const": 0
+                },
+                "y": {
+                    "type": "integer",
+                    "description": "Vertical layer offset in tiles. Always 0.",
+                    "const": 0
+                }
+            }
+        }
+    },
+
+    "required": ["compressionlevel", "height", "infinite", "layers", "nextlayerid", "nextobjectid", "orientation", "renderorder", "tiledversion", "tileheight", "tilesets", "tilewidth", "type", "version", "width"],
+    "additionalProperties": false,
+    "properties": {
+        "backgroundcolor": {
+            "type": "string",
+            "description": "Hex-formatted color (#RRGGBB or #AARRGGBB) (optional)",
+            "pattern": "^#([A-F0-9]{6}|[A-F0-9]{8})$"
+        },
+        "class": {
+            "type": "string",
+            "description": "The class of the map (since 1.9, optional)"
+        },
+        "compressionlevel": {
+            "type": "integer",
+            "description": "The compression level to use for tile layer data (defaults to -1, which means to use the algorithm default)",
+            "default": -1
+        },
+        "height": {
+            "type": "integer",
+            "description": "Number of tile rows",
+            "minimum": 1
+        },
+        "hexsidelength": {
+            "type": "integer",
+            "description": "Length of the side of a hex tile in pixels (hexagonal maps only)"
+        },
+        "infinite": {
+            "type": "boolean",
+            "description": "Whether the map has infinite dimensions"
+        },
+        "layers": {
+            "type": "array",
+            "description": "Array of Layers",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/def_layer" }
+        },
+        "nextlayerid": {
+            "type": "integer",
+            "description": "Auto-increments for each layer"
+        },
+        "nextobjectid": {
+            "type": "integer",
+            "description": "Auto-increments for each placed object"
+        },
+        "orientation": {
+            "type": "string",
+            "description": "`orthogonal`, `isometric`, `staggered` or `hexagonal`",
+            "enum": [ "orthogonal", "isometric", "staggered", "hexagonal"]
+        },
+        "parallaxoriginx": {
+            "type": "number",
+            "description": "X coordinate of the parallax origin in pixels (since 1.8, default: 0)",
+            "default": 0
+        },
+        "parallaxoriginy": {
+            "type": "number",
+            "description": "Y coordinate of the parallax origin in pixels (since 1.8, default: 0)",
+            "default": 0
+        },
+        "properties": {
+            "type": "array",
+            "description": "Array of Properties",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/def_property" }
+        },
+        "renderorder": {
+            "type": "string",
+            "description": "`right-down` (the default), `right-up`, `left-down` or `left-up` (currently only supported for orthogonal maps)",
+            "enum": [ "right-down", "right-up", "left-down", "left-up"],
+            "default": "right-down"
+        },
+        "staggeraxis": {
+            "type": "string",
+            "description": "`x` or `y` (staggered / hexagonal maps only)",
+            "enum": [ "x", "y"]
+        },
+        "staggerindex": {
+            "type": "string",
+            "description": "`odd` or `even` (staggered / hexagonal maps only)",
+            "enum": [ "odd", "even"]
+        },
+        "tiledversion": {
+            "type": "string",
+            "description": "The Tilde version used to save the file"
+        },
+        "tileheight": {
+            "type": "integer",
+            "description": "Map grid height",
+            "minimum": 1
+        },
+        "tilesets": {
+            "type": "array",
+            "description": "Array of Tilesets (TODO)",
+            "minItems": 1
+        },
+        "tilewidth": {
+            "type": "integer",
+            "description": "Map grid width",
+            "minimum": 1
+        },
+        "type": {
+            "type": "string",
+            "description": "`map` (since 1.0)",
+            "const": "map"
+        },
+        "version": {
+            "type": "string",
+            "description": "The JSON format version (previously a number, saved as string since 1.6)"
+        },
+        "width": {
+            "type": "integer",
+            "description": "Number of tile columns",
+            "minimum": 1
+        }
+   }
+}
