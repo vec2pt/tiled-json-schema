@@ -445,6 +445,240 @@
                     "const": 0
                 }
             }
+        },
+        "def_grid": {
+            "type": "object",
+            "description": "",
+            "additionalProperties": false,
+            "required": ["height", "width"],
+            "properties": {
+                "height": {
+                    "type": "integer",
+                    "description": "Cell height of tile grid"
+                },
+                "orientation": {
+                    "type": "string",
+                    "description": "`orthogonal` (default) or `isometric`",
+                    "enum": ["orthogonal", "isometric"],
+                    "default": "orthogonal"
+                },
+                "width": {
+                    "type": "integer",
+                    "description": "Cell width of tile grid"
+                }
+            }
+        },
+        "def_terrains": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "tile"],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of terrain",
+                    "default": 0
+                },
+                "properties": {
+                    "type": "array",
+                    "description": "Array of Properties",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_property" }
+                },
+                "tile": {
+                    "type": "integer",
+                    "description": "Local ID of tile representing terrain"
+                }
+            }
+        },
+        "def_tileoffset": {
+            "type": "object",
+            "description": "See <tileoffset> in the TMX Map Format.",
+            "additionalProperties": false,
+            "required": ["x", "y"],
+            "properties": {
+                "x": {
+                    "type": "integer",
+                    "description": "Horizontal offset in pixels",
+                    "default": 0
+                },
+                "y": {
+                    "type": "integer",
+                    "description": "Vertical offset in pixels (positive is down)",
+                    "default": 0
+                }
+            }
+        },
+        "def_tile": {
+            "type": "object",
+            "description": "",
+            "additionalProperties": false,
+            "required": [],
+            "properties": {}
+        },
+        "def_transformations": {
+            "type": "object",
+            "description": "See <transformations> in the TMX Map Format.",
+            "additionalProperties": false,
+            "required": [ "hflip", "vflip", "rotate", "preferuntransformed" ],
+            "properties": {
+                "hflip": {
+                    "type": "boolean",
+                    "description": "Tiles can be flipped horizontally",
+                    "default": false
+                },
+                "vflip": {
+                    "type": "boolean",
+                    "description": "Tiles can be flipped horizontally",
+                    "default": false
+                },
+                "rotate": {
+                    "type": "boolean",
+                    "description": "Tiles can be rotated in 90-degree increments",
+                    "default": false
+                },
+                "preferuntransformed": {
+                    "type": "boolean",
+                    "description": "Whether untransformed tiles remain preferred, otherwise transformed tiles are used to produce more variations",
+                    "default": false
+                }
+            }
+        },
+        "def_tileset": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["firstgid"],
+            "properties": {
+                "backgroundcolor": {
+                    "type": "string",
+                    "description": "Hex-formatted color (#RRGGBB or #AARRGGBB) (optional)",
+                    "pattern": "^#([A-F0-9]{6}|[A-F0-9]{8})$"
+                },
+                "class": {
+                    "type": "string",
+                    "description": "The class of the tileset (since 1.9, optional)"
+                },
+                "columns": {
+                    "type": "integer",
+                    "description": "The number of tile columns in the tileset"
+                },
+                "fillmode": {
+                    "type": "string",
+                    "description": "The fill mode to use when rendering tiles from this tileset (`stretch` (default) or `preserve-aspect-fit`) (since 1.9)",
+                    "enum": ["stretch", "preserve-aspect-fit"],
+                    "default": "stretch"
+                },
+                "firstgid": {
+                    "type": "integer",
+                    "description": "GID corresponding to the first tile in the set"
+                },
+                "grid": {
+                    "description": "(optional)",
+                    "$ref": "#/$defs/def_grid"
+                },
+                "image": {
+                    "type": "string",
+                    "description": "Image used for tiles in this set"
+                },
+                "imageheight": {
+                    "type": "integer",
+                    "description": "Height of source image in pixels"
+                },
+                "imagewidth": {
+                    "type": "integer",
+                    "description": "Width of source image in pixels"
+                },
+                "margin": {
+                    "type": "integer",
+                    "description": "Buffer between image edge and first tile (pixels)"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name given to this tileset"
+                },
+                "objectalignment": {
+                    "type": "string",
+                    "description": "Alignment to use for tile objects (`unspecified` (default), `topleft`, `top`, `topright`, `left`, `center`, `right`, `bottomleft`, `bottom` or `bottomright`) (since 1.4)",
+                    "enum": ["unspecified", "topleft", "top", "topright", "left", "center", "right", "bottomleft", "bottom", "bottomright"],
+                    "default": "unspecified"
+
+                },
+                "properties": {
+                    "type": "array",
+                    "description": "Array of Properties",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_property" }
+                },
+                "source": {
+                    "type": "string",
+                    "description": "The external file that contains this tilesets data"
+                },
+                "spacing": {
+                    "type": "integer",
+                    "description": "Spacing between adjacent tiles in image (pixels)"
+                },
+                "terrains": {
+                    "type": "array",
+                    "description": "Array of Terrains (optional)",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_terrains" }
+                },
+                "tilecount": {
+                    "type": "integer",
+                    "description": "The number of tilse in this tileset",
+                    "minimum": 0
+                },
+                "tiledversion": {
+                    "type": "string",
+                    "description": "The Tilde version used to save the file"
+                },
+                "tileheight": {
+                    "type": "integer",
+                    "description": "Maximum height of tiles in this set"
+                },
+                "tileoffset": {
+                    "description": "(optional)",
+                    "$ref": "#/$defs/def_tileoffset"
+                },
+                "tilerendersize": {
+                    "type": "string",
+                    "description": "The size to use when rendering tiles from this tileset on a tile layer (`tile` (default) or `grid`) (since 1.9)",
+                    "enum": ["tile", "grid"],
+                    "default": "tile"
+                },
+                "tiles": {
+                    "type": "array",
+                    "description": "Array of Tiles (optional) (TODO)",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_tile" }
+                },
+                "tilewidth": {
+                    "type": "integer",
+                    "description": "Maximum width of tiles in this set"
+                },
+                "transformations": {
+                    "description": "Allowed transformations (optional)",
+                    "$ref": "#/$defs/def_transformations"
+                },
+                "transparentcolor": {
+                    "type": "string",
+                    "description": "Hex-formatted color (#RRGGBB) (optional)",
+                    "pattern": "^#([A-F0-9]{6})$"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "`tileset` (for tileset files, since 1.0)",
+                    "const": "tileset"
+                },
+                "version": {
+                    "type": "string",
+                    "description": "The JSON format version (previously a number, saved as string since 1.6)"
+                },
+                "wangsets": {
+                    "type": "array",
+                    "description": "Array of Wang sets (since 1.1.5) (TODO)",
+                    "minItems": 1
+                }
+            }
         }
     },
 
@@ -540,8 +774,9 @@
         },
         "tilesets": {
             "type": "array",
-            "description": "Array of Tilesets (TODO)",
-            "minItems": 1
+            "description": "Array of Tilesets",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/def_tileset" }
         },
         "tilewidth": {
             "type": "integer",
