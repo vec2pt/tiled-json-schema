@@ -508,12 +508,94 @@
                 }
             }
         },
-        "def_tile": {
+        "def_frame": {
             "type": "object",
             "description": "",
             "additionalProperties": false,
-            "required": [],
-            "properties": {}
+            "required": ["duration", "tileid"],
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "Frame duration in milliseconds"
+                },
+                "tileid": {
+                    "type": "integer",
+                    "description": "Local tile ID representing this frame"
+                }
+            }
+        },
+        "def_tile": {
+            "type": "object",
+            "description": "Tile (Definition)",
+            "additionalProperties": false,
+            "required": ["id"],
+            "properties": {
+                "animation": {
+                    "type": "array",
+                    "description": "Array of Frames",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_frame" }
+                },
+                "id": {
+                    "type": "integer",
+                    "description": "Local ID of the tile"
+                },
+                "image": {
+                    "type": "string",
+                    "description": "Image representing this tile (optional, used for image collection tilesets)"
+                },
+                "imageheight": {
+                    "type": "integer",
+                    "description": "Height of the tile image in pixels"
+                },
+                "imagewidth": {
+                    "type": "integer",
+                    "description": "Width of the tile image in pixels"
+                },
+                "x": {
+                    "type": "integer",
+                    "description": "The X position of the sub-rectangle representing this tile (default: 0)",
+                    "default": 0
+                },
+                "y": {
+                    "type": "integer",
+                    "description": "The Y position of the sub-rectangle representing this tile (default: 0)",
+                    "default": 0
+                },
+                "width": {
+                    "type": "integer",
+                    "description": "The width of the sub-rectangle representing this tile (defaults to the image width)"
+                },
+                "height": {
+                    "type": "integer",
+                    "description": "The height of the sub-rectangle representing this tile (defaults to the image height)"
+                },
+                "objectgroup": {
+                    "description": "Layer with type `objectgroup`, when collision shapes are specified (optional)",
+                    "$ref": "#/$defs/def_layer"
+                },
+                "probability": {
+                    "type": "number",
+                    "description": "Percentage chance this tile is chosen when competing with others in the editor (default: 1)",
+                    "default": 1
+                },
+                "properties": {
+                    "type": "array",
+                    "description": "Array of Properties",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_property" }
+                },
+                "terrain": {
+                    "type": "array",
+                    "description": "Index of terrain for each corner of tile (optional, replaced by Wang sets since 1.5)",
+                    "minItems": 1,
+                    "items": { "type": "integer"}
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The class of the tile (was saved as `class` in 1.9, optional)"
+                }
+            }
         },
         "def_transformations": {
             "type": "object",
@@ -647,7 +729,7 @@
                 },
                 "tiles": {
                     "type": "array",
-                    "description": "Array of Tiles (optional) (TODO)",
+                    "description": "Array of Tiles (optional)",
                     "minItems": 1,
                     "items": { "$ref": "#/$defs/def_tile" }
                 },
