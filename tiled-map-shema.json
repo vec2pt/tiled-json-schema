@@ -625,6 +625,107 @@
                 }
             }
         },
+        "def_wangcolor": {
+            "type": "object",
+            "description": "",
+            "additionalProperties": false,
+            "required": [ "color", "name", "tile" ],
+            "properties": {
+                "class": {
+                    "type": "string",
+                    "description": "The class of the Wang color (since 1.9, optional)"
+                },
+                "color": {
+                    "type": "string",
+                    "description": "Hex-formatted color (#RRGGBB or #AARRGGBB) (optional)",
+                    "pattern": "^#([A-F0-9]{6}|[A-F0-9]{8})$"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the Wang color"
+                },
+                "probability": {
+                    "type": "number",
+                    "description": "Probability used when randomizing (default: 1)",
+                    "default": 1
+                },
+                "properties": {
+                    "type": "array",
+                    "description": "Array of Properties (since 1.5)",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_property" }
+                },
+                "tile": {
+                    "type": "integer",
+                    "description": "Local ID of tile representing the Wang color"
+                }
+            }
+        },
+        "def_wangtile": {
+            "type": "object",
+            "description": "",
+            "additionalProperties": false,
+            "required": [ "tileid", "wangid" ],
+            "properties": {
+                "tileid": {
+                    "type": "integer",
+                    "description": "Local ID of tile"
+                },
+                "wangid": {
+                    "type": "array",
+                    "description": "Array of Wang color indexes (`uchar[8]`)",
+                    "minItems": 8,
+                    "maxItems": 8,
+                    "items": {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                }
+            }
+        },
+        "def_wangset": {
+            "type": "object",
+            "description": "",
+            "additionalProperties": false,
+            "required": [ "colors", "name", "tile" ],
+            "properties": {
+                "class": {
+                    "type": "string",
+                    "description": "The class of the Wang set (since 1.9, optional)"
+                },
+                "colors": {
+                    "type": "array",
+                    "description": "Array of Wang colors (since 1.5)",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_wangcolor" }
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the Wang set"
+                },
+                "properties": {
+                    "type": "array",
+                    "description": "Array of Properties",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_property" }
+                },
+                "tile": {
+                    "type": "integer",
+                    "description": "Local ID of tile representing the Wang set"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "`corner`, `edge` or `mixed` (since 1.5)",
+                    "enum": ["corner", "edge", "mixed"]
+                },
+                "wangtiles": {
+                    "type": "array",
+                    "description": "Array of Wang tiles",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_wangtile" }
+                }
+            }
+        },
         "def_tileset": {
             "type": "object",
             "additionalProperties": false,
@@ -757,8 +858,9 @@
                 },
                 "wangsets": {
                     "type": "array",
-                    "description": "Array of Wang sets (since 1.1.5) (TODO)",
-                    "minItems": 1
+                    "description": "Array of Wang sets (since 1.1.5)",
+                    "minItems": 1,
+                    "items": { "$ref": "#/$defs/def_wangset" }
                 }
             }
         }
