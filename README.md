@@ -1,8 +1,5 @@
 # Tiled Map JSON Schema
 
-> [!WARNING]
-> The scheme is currently being developed and is not yet complete.
-
 Unofficial repository with a JSON schema for the [Tiled](https://www.mapeditor.org/) Map format. The schema is based on the documentation: [JSON Map Format](https://doc.mapeditor.org/en/stable/reference/json-map-format/) (for version 1.12).
 
 ## TODO
